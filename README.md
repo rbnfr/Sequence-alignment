@@ -1,11 +1,11 @@
 # Sequence-alignment
-Input: Sequences, similitude matrix.
-Output: Similitude file in txt format with aligned sequences, gaps and total punctuation according to our similitude matrix.
+**Input:** Sequences, similitude matrix.
+**Output:** Similitude file in txt format with aligned sequences, gaps and total punctuation according to our similitude matrix.
 
 ## Methods used
 ### Obtener matriz de similitud
-Input: Txt file with similitude matrix.
-Output: similitude table.
+**Input:** Txt file with similitude matrix.
+**Output:** similitude table.
 
 ```python
 def obtener_matriz_similitud(fichero_entrada):    
@@ -32,8 +32,8 @@ def obtener_matriz_similitud(fichero_entrada):
 ```
 
 ### Analizar FASTA
-Input:FASTA file with DNA sequences and headers.
-Output:Table with headers as keys and sequences as values.
+**Input:** FASTA file with DNA sequences and headers.
+**Output:** Table with headers as keys and sequences as values.
 
 ```python
 def analizar_fasta(archivo):
@@ -74,13 +74,13 @@ def analizar_fasta(archivo):
     return tabla
 ```
 ### Generar salida
-Input:
+**Input:**
 * Sequences table.
 * Similitude table.
 * GAP penalization (User input)
 * Output filename (User input)
 
-Output: Txt file with headers, alignment and punctuation.
+**Output:** Txt file with headers, alignment and punctuation.
 
 ```python
 def generar_salida(tabla_secuencias,gap,matriz_similitud,archivo_salida):
@@ -112,12 +112,12 @@ def generar_salida(tabla_secuencias,gap,matriz_similitud,archivo_salida):
 ```
 
 ### Alineamiento
-Input:
+**Input:**
 * Sequences
 * GAP punctuation
 * Similitude table
 
-Output: Alignments and alignment punctuation.
+**Output:** Alignments and alignment punctuation.
 
 ```python
 def alineamiento(secuencia1,secuencia2,gap,matriz_similitud):
