@@ -8,15 +8,102 @@
     <!-- Angular Material style sheet -->
     <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
+    <link rel="stylesheet" href="/css/index.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    </script>
 
     </script>
   </head>
   <body ng-app = "Alignment">
+    <div ng-controller = "toolbar">
+
+
+    <md-content>
+        <md-toolbar class="md-hue-2">
+          <div class="md-toolbar-tools">
+            <md-button class="md-icon-button" aria-label="Settings" >
+              <md-icon md-svg-icon="img/icons/ic_weekend_24px.svg"></md-icon>
+              <i class="material-icons">search</i>
+            </md-button>
+
+            <h2 flex md-truncate>Toolbar</h2>
+
+            <md-button class="md-icon-button" aria-label="Favorite">
+              <md-icon md-svg-icon="img/icons/ic_move_to_inbox_48px.svg" style="color: greenyellow;"></md-icon>
+            </md-button>
+
+            <md-button class="md-icon-button" aria-label="More">
+              <md-icon md-svg-icon="img/icons/ic_move_to_inbox_48px.svg"></md-icon>
+            </md-button>
+          </div>
+        </md-toolbar>
+    </md-content>
+  </div>
+  
+  <div ng-controller="AppCtrl as vm" layout="column" layout-margin style="padding:25px;" ng-cloak>
+
+  <h2 class="md-title">Determinate</h2>
+
+  <p>
+    For operations where the percentage of the operation completed can be determined, use a <b>determinate</b>
+    indicator.
+    They give users a quick sense of how long an operation will take.
+  </p>
+  <md-progress-linear md-mode="determinate" value="{{vm.determinateValue}}"></md-progress-linear>
+
+  <h4 class="md-title">Indeterminate</h4>
+
+  <p>
+    For operations where the user is asked to wait a moment while something finishes up, and it's not
+    necessary to expose what's happening behind the scenes and how long it will take, use an
+    <b>indeterminate</b> indicator:
+  </p>
+  <md-progress-linear md-mode="indeterminate"></md-progress-linear>
+
+  <h4 class="md-title">Buffer</h4>
+
+  <p>
+    For operations where the user wants to indicate some activity or loading from the server,
+    use the <b>buffer</b> indicator:
+  </p>
+  <md-progress-linear class="md-warn" md-mode="buffer" value="{{vm.determinateValue}}"
+                      md-buffer-value="{{vm.determinateValue2}}"
+                      ng-disabled="!vm.showList[0]"></md-progress-linear>
+
+  <h4 class="md-title">Query</h4>
+
+  <p>
+    For situations where the user wants to indicate pre-loading (until the loading can actually be made),
+    use the <b>query</b> indicator:
+  </p>
+
+  <div class="container" ng-class="{'visible' : !vm.activated}">
+    <md-progress-linear md-mode="query" ng-disabled="!vm.showList[1]"></md-progress-linear>
+    <div class="bottom-block">
+      <span>Loading application libraries...</span>
+    </div>
+  </div>
+
+  <hr ng-class="{'visible' : vm.activated}">
+
+  <div id="loaders" layout="row" layout-align="start center">
+
+    <p>Query and Buffer progress linear indicators: </p>
+
+    <h5>Off</h5>
+    <md-switch
+        ng-model="vm.activated"
+        ng-change="vm.toggleActivation()"
+        aria-label="Enable Indicators">
+      <h5>On</h5>
+    </md-switch>
+  </div>
+</div>
 
 
 
-
-
+    <script src="" charset="utf-8"></script>
     <!-- Angular Material Libraries -->
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-animate.min.js"></script>
