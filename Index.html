@@ -6,11 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- Angular Material style sheet -->
+
     <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
     <link rel="stylesheet" href="/css/index.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-        
+
   </head>
   <body ng-app = "Alignment">
 
@@ -36,7 +37,7 @@
       </md-content>
     </div>
 
-  <div ng-controller="AppCtrl" layout="column" layout-margin style="padding:25px;">
+  <div class="progress-bar" ng-controller="AppCtrl" layout="column" layout-margin style="padding:25px;" ng-hide="true">
 
     <h4 class="md-title">Proccessing</h4>
     <p>
@@ -45,6 +46,16 @@
     <md-progress-linear md-mode="indeterminate"></md-progress-linear>
 
   </div>
+
+  <div class="exe">
+    <button class = "exe-button md-raised md-primary" >Align</button>
+  </div>
+  <script type="text/javascript">
+
+
+  </script>
+
+
 </div>
 
 
@@ -59,6 +70,7 @@
 
     <!-- Angular Material Library -->
     <script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.js"></script>
+    <script src="/scripts/index.js"></script>
     <script src="/scripts/toolbar.js" charset="utf-8"></script>
   </body>
 
