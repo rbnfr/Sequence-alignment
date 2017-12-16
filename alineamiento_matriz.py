@@ -9,25 +9,37 @@ Created on Thu Dec 31 17:46:10 2015
 
 import datetime
 
+
 def obtener_matriz_similitud(fichero_entrada):
+    """
+    Obtiene los datos de similitud de un fichero y devuelve una matriz de similitud entre bases nitrogenadas.
+    :Fichero_entrada: Archivo que contiene la matriz de similitud entre bases.
+    """
+
+    #Obtención de la lista de bases.
     with open(fichero_entrada, "r") as f:
         documento = f.readlines()
         bases = documento[0].split()[1:]
         matriz = {}
 
+        # Incializar la matriz a cero.
         for base in bases:
             matriz[base] = {base : 0}
 
-        for i in range(len(bases)):
-            for j in range(len(bases)):
+        for i in xrange(len(bases)):
+            for j in xrange(len(bases)):
                 linea_punt = documento[j+1]
                 linea_punt_lista = linea_punt.split(" ")
                 puntuacion = linea_punt_lista[i+1].rstrip()
                 matriz[bases[i]][linea_punt_lista[0]] = puntuacion
+
         print matriz
         return matriz
 
 def analizar_fasta(archivo):
+    """
+    Obtiene las secuencias y los identificadores de un archivo en formato FASTA y los devuelve en una tabla.
+    """
     tabla={}
 
     # Trata de abrir el archivo con las secuencias
@@ -53,11 +65,11 @@ def analizar_fasta(archivo):
         este en el mismo directorio que el script, lo informará y dará la opción de introducir los datos manualmente
         """
         print "No se puede abrir el archivo, compruebe que el nombre o la ruta sean correctos."
-#        secuencia1 = raw_input("Secuencia 1: ")
-#        secuencia2 = raw_input("Secuencia 2: ")
-#        identificador1 = raw_input("Identificador de la secuencia 1: ")
-#        identificador2 = raw_input("Identificador de la secuencia 2: ")
-#        tabla = {identificador1:secuencia1,identificador2:secuencia2}
+    #    secuencia1 = raw_input("Secuencia 1: ")
+    #    secuencia2 = raw_input("Secuencia 2: ")
+    #    identificador1 = raw_input("Identificador de la secuencia 1: ")
+    #    identificador2 = raw_input("Identificador de la secuencia 2: ")
+    #    tabla = {identificador1:secuencia1,identificador2:secuencia2}
 
     return tabla
 
@@ -103,7 +115,7 @@ def alineamiento(secuencia1,secuencia2,gap,matriz_similitud):
 
     # La matriz de similitud almacena los valores de coincidencia y error. Se pueden editar los valores para asignar puntuaciones concretas según el caso.
 
-    #Variables para recorrer las secuencias
+    # Variables para recorrer las secuencias
     I = xrange(len(secuencia1)+1)
     J = xrange(len(secuencia2)+1)
 
@@ -133,8 +145,6 @@ def alineamiento(secuencia1,secuencia2,gap,matriz_similitud):
             izquierda = F[i-1][j]   + gap
             arriba    = F[i][j-1]   + gap
             F[i][j] = max(diagonal, izquierda, arriba)
-
-# Comprobación de la matriz de puntuación
 
     # Reconstrucción del alineamiento
     alineamiento1 = ""
