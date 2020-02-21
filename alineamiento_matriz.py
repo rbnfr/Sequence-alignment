@@ -26,14 +26,14 @@ def obtener_matriz_similitud(fichero_entrada):
         for base in bases:
             matriz[base] = {base : 0}
 
-        for i in xrange(len(bases)):
-            for j in xrange(len(bases)):
+        for i in range(len(bases)):
+            for j in range(len(bases)):
                 linea_punt = documento[j+1]
                 linea_punt_lista = linea_punt.split(" ")
                 puntuacion = linea_punt_lista[i+1].rstrip()
                 matriz[bases[i]][linea_punt_lista[0]] = puntuacion
 
-        print matriz
+        print (matriz)
         return matriz
 
 def analizar_fasta(archivo):
@@ -64,7 +64,7 @@ def analizar_fasta(archivo):
         Si se detecta un error de entrada por no poner correctamente el nombre del archivo, su ruta o por no estar
         este en el mismo directorio que el script, lo informará y dará la opción de introducir los datos manualmente
         """
-        print "No se puede abrir el archivo, compruebe que el nombre o la ruta sean correctos."
+        print ("No se puede abrir el archivo, compruebe que el nombre o la ruta sean correctos.")
     #    secuencia1 = raw_input("Secuencia 1: ")
     #    secuencia2 = raw_input("Secuencia 2: ")
     #    identificador1 = raw_input("Identificador de la secuencia 1: ")
@@ -106,7 +106,7 @@ def alineamiento(secuencia1,secuencia2,gap,matriz_similitud):
     """
     Subrutina de alineamiento global de secuencias (algoritmo de Needleman-Wunsch).
     Alinea dos secuencias de la misma longitud y devuelve el alineamiento junto a la puntuación obtenida.
-    La puntuación dependerá del valor que le hayamos definido a los eventos de copincidencia, error o gap.
+    La puntuación dependerá del valor que le hayamos definido a los eventos de coincidencia, error o gap.
     Devuelve cada una de las secuencias con los gaps (si los hubiera) y la puntuación de ese alineamiento.
     """
 
@@ -116,8 +116,8 @@ def alineamiento(secuencia1,secuencia2,gap,matriz_similitud):
     # La matriz de similitud almacena los valores de coincidencia y error. Se pueden editar los valores para asignar puntuaciones concretas según el caso.
 
     # Variables para recorrer las secuencias
-    I = xrange(len(secuencia1)+1)
-    J = xrange(len(secuencia2)+1)
+    I = range(len(secuencia1)+1)
+    J = range(len(secuencia2)+1)
 
     # Generación de la matriz vacía
     F = [[0 for i in J] for j in I]
@@ -129,8 +129,8 @@ def alineamiento(secuencia1,secuencia2,gap,matriz_similitud):
         F[0][j] = gap*j
 
     # Cálculo de la matriz de puntuación
-    for i in xrange(1, len(secuencia1)+1):
-        for j in xrange(1, len(secuencia2)+1):
+    for i in range(1, len(secuencia1)+1):
+        for j in range(1, len(secuencia2)+1):
             # Bases
             base1 = secuencia1[i-1]
             base2 = secuencia2[j-1]
@@ -200,9 +200,9 @@ def alineamiento(secuencia1,secuencia2,gap,matriz_similitud):
 def main():
 
     # Definir archivos de entrada, salida y generar la tabla con cada identificador ligado a su secuencia
-    archivo_fasta = raw_input("Archivo FASTA de entrada:")
-    archivo_similitud = raw_input("Archivo con la matriz de similitud:")
-    archivo_salida_nombre = raw_input("Archivo de salida:")
+    archivo_fasta = input("Archivo FASTA de entrada:")
+    archivo_similitud = input("Archivo con la matriz de similitud:")
+    archivo_salida_nombre = input("Archivo de salida:")
     archivo_salida = archivo_salida_nombre + ".txt"
     tabla_secuencias = analizar_fasta(archivo_fasta)
 
@@ -215,7 +215,7 @@ def main():
 #    error = int(raw_input("Puntuación de error:"))
 # %%
 
-    gap = int(raw_input("Puntuación de gap: "))
+    gap = int(input("Puntuación de gap: "))
     matriz_similitud = obtener_matriz_similitud(archivo_similitud)
 
     ti=datetime.datetime.now() # Tiempo inicial
@@ -224,7 +224,7 @@ def main():
     generar_salida(tabla_secuencias,gap,matriz_similitud,archivo_salida)
 
     tf=datetime.datetime.now() # Tiempo final
-    print "Duracion -->",tf-ti
+    print ("Duracion -->",tf-ti)
 
 
 if __name__ == "__main__":
