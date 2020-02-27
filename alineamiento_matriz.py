@@ -8,6 +8,7 @@ Created on Thu Dec 31 17:46:10 2015
 
 
 import datetime
+import pprint
 
 
 def obtener_matriz_similitud(fichero_entrada):
@@ -33,7 +34,9 @@ def obtener_matriz_similitud(fichero_entrada):
                 puntuacion = linea_punt_lista[i+1].rstrip()
                 matriz[bases[i]][linea_punt_lista[0]] = puntuacion
 
-        print (matriz)
+        # print("Point matrix")
+        # pp = pprint.PrettyPrinter(indent=4)
+        # pp.pprint(matriz)
         return matriz
 
 def analizar_fasta(archivo):
@@ -80,7 +83,7 @@ def generar_salida(tabla_secuencias,gap,matriz_similitud,archivo_salida):
     Por defecto, sobreescribirá un archivo de salida si ya existe otro con el mismo nombre.
     """
     lista_secuencias = list(tabla_secuencias.values())
-    lista_identificadores = tabla_secuencias.keys()
+    lista_identificadores = list(tabla_secuencias.keys())
     alineamiento1,alineamiento2,puntuacion = alineamiento(lista_secuencias[0],lista_secuencias[1],gap,matriz_similitud)
 
     # Abrimos un fichero en el que escribiremos los alineamientos junto a los identificadores de las secuencias, así como la puntuación de ese alineamiento.
@@ -232,7 +235,7 @@ def main():
     generar_salida(tabla_secuencias,gap,matriz_similitud,archivo_salida)
 
     tf=datetime.datetime.now() # Tiempo final
-    print ("Duracion -->",tf-ti)
+    print ("ETA -->",tf-ti)
 
 
 if __name__ == "__main__":
