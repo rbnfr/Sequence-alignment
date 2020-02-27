@@ -65,11 +65,11 @@ def analizar_fasta(archivo):
         este en el mismo directorio que el script, lo informará y dará la opción de introducir los datos manualmente
         """
         print ("No se puede abrir el archivo, compruebe que el nombre o la ruta sean correctos.")
-    #    secuencia1 = raw_input("Secuencia 1: ")
-    #    secuencia2 = raw_input("Secuencia 2: ")
-    #    identificador1 = raw_input("Identificador de la secuencia 1: ")
-    #    identificador2 = raw_input("Identificador de la secuencia 2: ")
-    #    tabla = {identificador1:secuencia1,identificador2:secuencia2}
+        # secuencia1 = raw_input("Secuencia 1: ")
+        # secuencia2 = raw_input("Secuencia 2: ")
+        # identificador1 = raw_input("Identificador de la secuencia 1: ")
+        # identificador2 = raw_input("Identificador de la secuencia 2: ")
+        # tabla = {identificador1:secuencia1,identificador2:secuencia2}
 
     return tabla
 
@@ -79,7 +79,7 @@ def generar_salida(tabla_secuencias,gap,matriz_similitud,archivo_salida):
     Genera un fichero txt con los identificadores, las secuencias alineadas y la puntuación del alineamiento.
     Por defecto, sobreescribirá un archivo de salida si ya existe otro con el mismo nombre.
     """
-    lista_secuencias = tabla_secuencias.values()
+    lista_secuencias = list(tabla_secuencias.values())
     lista_identificadores = tabla_secuencias.keys()
     alineamiento1,alineamiento2,puntuacion = alineamiento(lista_secuencias[0],lista_secuencias[1],gap,matriz_similitud)
 
@@ -136,10 +136,10 @@ def alineamiento(secuencia1,secuencia2,gap,matriz_similitud):
             base2 = secuencia2[j-1]
 
             # Posición en la matriz de similitud
-#            posicion1 = bases[base1]
-#            posicion2 = bases[base2]
-#            prueba = matriz_similitud[base1][base2]
-#            print "prueba:",prueba
+            # posicion1 = bases[base1]
+            # posicion2 = bases[base2]
+            # prueba = matriz_similitud[base1][base2]
+            # print "prueba:",prueba
 
             diagonal  = F[i-1][j-1] + int(matriz_similitud[base1][base2])
             izquierda = F[i-1][j]   + gap
@@ -165,8 +165,8 @@ def alineamiento(secuencia1,secuencia2,gap,matriz_similitud):
         base2 = secuencia2[j-1]
 
         # Posición en la matriz de similitud
-#        posicion1 = bases[base1]
-#        posicion2 = bases[base2]
+        # posicion1 = bases[base1]
+        # posicion2 = bases[base2]
 
         if puntuacion == punt_diagonal + int(matriz_similitud[base1][base2]):
             alineamiento1 = secuencia1[i-1] + alineamiento1
@@ -201,19 +201,27 @@ def main():
 
     # Definir archivos de entrada, salida y generar la tabla con cada identificador ligado a su secuencia
     archivo_fasta = input("Archivo FASTA de entrada:")
+    while not archivo_fasta:
+        archivo_fasta = input("Archivo FASTA de entrada:")
+    
     archivo_similitud = input("Archivo con la matriz de similitud:")
+    while not archivo_similitud:
+        archivo_similitud = input("Archivo con la matriz de similitud:")
+
     archivo_salida_nombre = input("Archivo de salida:")
+    while not archivo_salida_nombre:
+        archivo_salida_nombre = input("Archivo de salida:")
+
     archivo_salida = archivo_salida_nombre + ".txt"
     tabla_secuencias = analizar_fasta(archivo_fasta)
 
-# Comprobación de las secuencias y los identificadores obtenidos
-#    for identificador in tabla_secuencias.keys():
-#        print "Identificador:",identificador,"\n","Secuencia:",tabla_secuencias[identificador],"\n"
+    # Comprobación de las secuencias y los identificadores obtenidos
+    #    for identificador in tabla_secuencias.keys():
+    #        print "Identificador:",identificador,"\n","Secuencia:",tabla_secuencias[identificador],"\n"
 
     # Definición de las puntuaciones de coincidencia, error y gap
-#    coincidencia = int(raw_input("Puntuación de coincidencia:"))
-#    error = int(raw_input("Puntuación de error:"))
-# %%
+    # coincidencia = int(raw_input("Puntuación de coincidencia:"))
+    # error = int(raw_input("Puntuación de error:"))
 
     gap = int(input("Puntuación de gap: "))
     matriz_similitud = obtener_matriz_similitud(archivo_similitud)
