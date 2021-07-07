@@ -5,47 +5,88 @@ Created on Thu Dec 31 17:46:10 2015
 @author: Rubén
 """
 
-
-
 import datetime
+import time
 import pprint
+import pandas as pd
+from os import path
+import csv
+from Bio.SeqIO.FastaIO import SimpleFastaParser
 
-
-def obtener_matriz_similitud(fichero_entrada):
+def obtener_matriz_similitud(input_file:str) -> dict:
     """
     Obtiene los datos de similitud de un fichero y devuelve una matriz de similitud entre bases nitrogenadas.
     :Fichero_entrada: Archivo que contiene la matriz de similitud entre bases.
     """
 
-    #Obtención de la lista de bases.
-    with open(fichero_entrada, "r") as f:
-        documento = f.readlines()
-        bases = documento[0].split()[1:]
-        matriz = {}
+    _, file_type = path.splitext(input_file)
 
-        # Incializar la matriz a cero.
-        for base in bases:
-            matriz[base] = {base : 0}
+    if file_type == '.xlsx':
+        score_excel = pd.read_excel(input_file, index_col=0)
+        return score_excel.to_dict('dict')
 
-        for i in range(len(bases)):
-            for j in range(len(bases)):
-                linea_punt = documento[j+1]
-                linea_punt_lista = linea_punt.split(" ")
-                puntuacion = linea_punt_lista[i+1].rstrip()
-                matriz[bases[i]][linea_punt_lista[0]] = puntuacion
+    elif file_type == '.csv':
+        with open(input_file, 'r') as csvfile:
+            dialect = csv.Sniffer().sniff(csvfile.readline())
+            csv_separator = dialect.delimiter        
+        
+        score_csv = pd.read_csv(input_file, index_col=0, sep = csv_separator)
+        return score_csv.to_dict('dict')
 
-        # print("Point matrix")
-        # pp = pprint.PrettyPrinter(indent=4)
-        # pp.pprint(matriz)
-        return matriz
+    elif file_type == '.txt':
+        #Obtención de la lista de bases.
+        with open(input_file, "r") as f:
+            documento = f.readlines()
+            bases = documento[0].split()[1:]
+            matriz = {}
 
-def analizar_fasta(archivo):
+            # Incializar la matriz a cero.
+            for base in bases:
+                matriz[base] = {base : 0}
+
+            for i in range(len(bases)):
+                for j in range(len(bases)):
+                    linea_punt = documento[j+1]
+                    linea_punt_lista = linea_punt.split(" ")
+                    puntuacion = linea_punt_lista[i+1].rstrip()
+                    matriz[bases[i]][linea_punt_lista[0]] = puntuacion
+
+            # print("Score matrix")
+            # pp = pprint.PrettyPrinter(indent=4)
+            # pp.pprint(matriz)
+            f.close()
+            return matriz
+    else:
+        raise Exception('File format not supported')
+
+def analizar_fasta(file) -> dict:
     """
     Obtiene las secuencias y los identificadores de un archivo en formato FASTA y los devuelve en una tabla.
     """
-    tabla={}
+    sequences_dict = {}
 
+    try:
+        with open(file, 'r') as fasta_file:
+            fasta_parsed = SimpleFastaParser(fasta_file)
+            for values in fasta_parsed:
+                sequences_dict[values[0]] = sequences_dict.get(values[0], values[1])
+            fasta_file.close()
+    except IOError:
+        """
+        Si se detecta un error de entrada por no poner correctamente el nombre del archivo, su ruta o por no estar
+        este en el mismo directorio que el script, lo informará y dará la opción de introducir los datos manualmente
+        """
+        print ("No se puede abrir el archivo, compruebe que el nombre o la ruta sean correctos.")
+        identificador1 = input("Identificador de la secuencia 1: ")
+        secuencia1     = input("Secuencia 1: ")
+        identificador2 = input("Identificador de la secuencia 2: ")
+        secuencia2     = input("Secuencia 2: ")        
+        
+        sequences_dict = {identificador1:secuencia1,identificador2:secuencia2}
+
+    return sequences_dict
     # Trata de abrir el archivo con las secuencias
+    """
     try:
         archivo_fasta = open(archivo)
         for linea in archivo_fasta:
@@ -63,10 +104,10 @@ def analizar_fasta(archivo):
     # Si el archivo no puede ser abierto, se informa del error.
     # Se da la opción de introducir manualmente las secuencias para los casos de prueba
     except IOError:
-        """
-        Si se detecta un error de entrada por no poner correctamente el nombre del archivo, su ruta o por no estar
-        este en el mismo directorio que el script, lo informará y dará la opción de introducir los datos manualmente
-        """
+        
+        #Si se detecta un error de entrada por no poner correctamente el nombre del archivo, su ruta o por no estar
+        #este en el mismo directorio que el script, lo informará y dará la opción de introducir los datos manualmente
+        
         print ("No se puede abrir el archivo, compruebe que el nombre o la ruta sean correctos.")
         # secuencia1 = raw_input("Secuencia 1: ")
         # secuencia2 = raw_input("Secuencia 2: ")
@@ -75,8 +116,9 @@ def analizar_fasta(archivo):
         # tabla = {identificador1:secuencia1,identificador2:secuencia2}
 
     return tabla
+    """
 
-def generar_salida(tabla_secuencias,gap,matriz_similitud,archivo_salida):
+def generar_salida(tabla_secuencias,gap,matriz_similitud,archivo_salida) -> None:
     """
     Subrutina a la que se da una tabla con dos secuencias y sus identificadores, un archivo de salida y las puntuaciones para un alineamiento.
     Genera un fichero txt con los identificadores, las secuencias alineadas y la puntuación del alineamiento.
@@ -102,8 +144,6 @@ def generar_salida(tabla_secuencias,gap,matriz_similitud,archivo_salida):
         output_file.write(str(puntuacion))
         output_file.write(str("\n\n"))
         output_file.close()
-
-
 
 def alineamiento(secuencia1,secuencia2,gap,matriz_similitud):
     """
@@ -199,7 +239,6 @@ def alineamiento(secuencia1,secuencia2,gap,matriz_similitud):
 
     return alineamiento1, alineamiento2, F[len(secuencia1)][len(secuencia2)]
 
-
 def main():
 
     # Definir archivos de entrada, salida y generar la tabla con cada identificador ligado a su secuencia
@@ -229,12 +268,12 @@ def main():
     gap = int(input("Puntuación de gap: "))
     matriz_similitud = obtener_matriz_similitud(archivo_similitud)
 
-    ti=datetime.datetime.now() # Tiempo inicial
+    ti=time.perf_counter() # Tiempo inicial
 
     # Se escribe el alineamiento, junto a los identificadores de cada secuencia y la puntuación obtenida en el archivo de salida
     generar_salida(tabla_secuencias,gap,matriz_similitud,archivo_salida)
 
-    tf=datetime.datetime.now() # Tiempo final
+    tf=time.perf_counter() # Tiempo final
     print ("ETA -->",tf-ti)
 
 

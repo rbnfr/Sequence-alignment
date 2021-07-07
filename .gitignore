@@ -65,3 +65,5 @@ target/
 venv/
 
 .idea
+# Test folders
+test_files/
